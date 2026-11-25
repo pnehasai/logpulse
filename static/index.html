@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>LogPulse Demo Dashboard</title>
+<style>
+  body { font-family: -apple-system, sans-serif; max-width: 1000px; margin: 40px auto; padding: 0 20px; background: #0d1117; color: #c9d1d9; }
+  h1 { color: #58a6ff; }
+  h3 { margin-top: 0; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .metric-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 12px; text-align: center; }
+  .metric-box .num { font-size: 26px; font-weight: bold; color: #58a6ff; }
+  .metric-box .label { font-size: 12px; color: #8b949e; }
+  .metric-box .sub { font-size: 11px; color: #6e7681; margin-top: 4px; }
+  input, button { padding: 8px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; }
+  button { background: #238636; cursor: pointer; border: none; padding: 8px 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 6px; border-bottom: 1px solid #30363d; vertical-align: top; word-break: break-word; }
+  .hit { color: #3fb950; } .miss { color: #d29922; } .fail { color: #f85149; }
+  .note { font-size: 12px; color: #8b949e; }
+</style>
+</head>
+<body>
+  <h1>⚡ LogPulse Demo Dashboard</h1>
+
+  <div class="card">
+    <h3>Send a test log</h3>
+    <input type="text" id="apiKey" placeholder="X-API-Key" style="width:150px">
+    <input type="text" id="service" placeholder="service" value="checkout-api" style="width:120px">
+    <input type="text" id="message" placeholder="error message" value="Database connection timeout after 3000ms" style="width:320px">
+    <button onclick="sendLog()">Send</button>
+    <div id="sendResult" style="margin-top:8px; font-size:13px;"></div>
+  </div>
+
+  <h3>Live (since the app started)</h3>
+  <div class="metrics" id="metrics"></div>
+
+  <h3>Measured results (all time, from the database)</h3>
+  <div class="metrics" id="summary"></div>
+  <p class="note">"Naive" means calling the LLM once for every log, at the measured tokens per call.
+     Rule precision is checked against the dataset's own template labels (Loghub replays only).</p>
+
+  <div class="card">
+    <h3>Recent Logs</h3>
+    <table id="logsTable"><thead><tr><th>Time</th><th>Service</th><th>Message</th><th>Fix</th><th>Source</th></tr></thead><tbody></tbody></table>
+  </div>
+
+  <div class="card">
+    <h3>Learned Rules</h3>
+    <table id="rulesTable"><thead><tr><th>Pattern</th><th>Fix</th></tr></thead><tbody></tbody></table>
+  </div>
+
+<script>
+// Log text comes from outside services, so it is escaped before it goes into the page.
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function fmt(v, suffix = '') { return v === null || v === undefined ? '—' : v + suffix; }
+function box(num, label, sub = '') {
+  return `<div class="metric-box"><div class="num">${esc(num)}</div><div class="label">${esc(label)}</div>${sub ? `<div class="sub">${esc(sub)}</div>` : ''}</div>`;
+}
+
+async function sendLog() {
+  const key = document.getElementById('apiKey').value;
+  const service = document.getElementById('service').value;
+  const message = document.getElementById('message').value;
+  const res = await fetch('/v1/telemetry/ingest', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-API-Key': key },
+    body: JSON.stringify({ service, level: 'ERROR', message, source: 'dashboard' })
+  });
+  const data = await res.json();
+  document.getElementById('sendResult').textContent = res.status + ': ' + JSON.stringify(data);
+  setTimeout(refresh, 1500);
+}
+
+function sourceClass(routedBy, fix) {
+  if ((fix || '').startsWith('COMPILE FAILED')) return 'fail';
+  return /^(L1_|L2_)|CACHE/.test(routedBy || '') ? 'hit' : 'miss';
+}
+
+async function refresh() {
+  const m = await (await fetch('/metrics')).json();
+  document.getElementById('metrics').innerHTML =
+    box(m.total_messages_produced_to_kafka, 'Messages Sent') +
+    box(m.total_hot_cache_hits, 'Cache Hits') +
+    box(m.total_cache_misses, 'Cache Misses') +
+    box(m.redis_cached_rules_count, 'Rules Learned') +
+    box(m.llm_calls_since_start, 'LLM Calls', `${m.llm_tokens_since_start} tokens`) +
+    box(m.compile_queue_depth, 'Compile Queue');
+
+  const s = await (await fetch('/metrics/summary')).json();
+  const n = s.naive_comparison, lat = s.latency, ev = s.dataset_eval;
+  document.getElementById('summary').innerHTML =
+    box(s.logs.handled, 'Logs Handled', `${s.logs.failed} failed, ${s.logs.pending} pending`) +
+    box(fmt(s.cache_hit_rate_pct, '%'), 'Cache Hit Rate') +
+    box(`${n.actual_llm_calls} / ${n.naive_llm_calls}`, 'LLM Calls vs Naive') +
+    box(fmt(n.token_reduction_pct, '%'), 'Fewer LLM Tokens', `${n.actual_tokens} vs ~${fmt(n.naive_tokens_estimate)}`) +
+    box(fmt(lat.ingest_to_fix_cache_hit.p50_ms, ' ms'), 'Fix Time, Cache Hit (p50)', `p95 ${fmt(lat.ingest_to_fix_cache_hit.p95_ms, ' ms')}`) +
+    box(fmt(lat.ingest_to_fix_llm.p50_ms, ' ms'), 'Fix Time, LLM (p50)', `p95 ${fmt(lat.ingest_to_fix_llm.p95_ms, ' ms')}`) +
+    box(fmt(lat.kafka_queue_lag.p50_ms, ' ms'), 'Kafka Queue Lag (p50)', `p95 ${fmt(lat.kafka_queue_lag.p95_ms, ' ms')}`) +
+    box(fmt(ev.rule_precision_pct, '%'), 'Rule Precision', `${ev.cache_hits_checked} hits checked`);
+
+  const logs = (await (await fetch('/logs')).json()).logs;
+  document.getElementById('logsTable').querySelector('tbody').innerHTML = logs.map(l => `
+    <tr>
+      <td>${esc(l.timestamp ? l.timestamp.split('T')[1]?.split('.')[0] : '')}</td>
+      <td>${esc(l.service)}</td>
+      <td>${esc(l.message)}</td>
+      <td>${esc(l.ai_analysis)}</td>
+      <td class="${sourceClass(l.routed_by, l.ai_analysis)}">${esc(l.routed_by)}${l.source ? `<br><span class="note">${esc(l.source)}</span>` : ''}</td>
+    </tr>`).join('');
+
+  const rules = (await (await fetch('/rules')).json()).rules;
+  document.getElementById('rulesTable').querySelector('tbody').innerHTML = rules.map(r => `
+    <tr><td><code>${esc(r.regex_pattern)}</code></td><td>${esc(r.cached_fix)}</td></tr>`).join('');
+}
+
+refresh();
+setInterval(refresh, 3000); // auto-refresh every 3s so you can see live updates during a demo
+</script>
+</body>
+</html>

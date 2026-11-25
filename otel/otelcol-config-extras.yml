@@ -1,0 +1,28 @@
+# Forwards the OpenTelemetry Demo's logs into LogPulse.
+#
+# The demo (https://github.com/open-telemetry/opentelemetry-demo) loads
+# src/otel-collector/otelcol-config-extras.yml last, so copy this file over
+# that one in your clone of the demo, then start the demo as usual.
+#
+# The collector merges config files but REPLACES lists, so the logs pipeline
+# below repeats the demo's own exporters (opensearch, debug) and adds ours.
+# If the demo changes its exporter names, check the comments in its own
+# otelcol-config-extras.yml and update the list to match.
+
+exporters:
+  otlp_http/logpulse:
+    # The collector runs in a container, LogPulse runs on the host.
+    # 172.17.0.1 is the host as seen from Docker's default bridge on Linux.
+    # If that doesn't connect, use the VM's own IP address instead.
+    endpoint: http://172.17.0.1:8000
+    encoding: json
+    # Must equal the INGEST_API_KEY the app was started with. The demo's
+    # collector container doesn't inherit your shell's variables, so type the
+    # value here (or delete these two lines if the app runs without a key).
+    headers:
+      X-API-Key: "put-your-INGEST_API_KEY-value-here"
+
+service:
+  pipelines:
+    logs:
+      exporters: [opensearch, debug, otlp_http/logpulse]

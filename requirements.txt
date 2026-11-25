@@ -1,0 +1,25 @@
+# App
+fastapi
+uvicorn
+httpx
+pydantic
+aiokafka
+redis
+aiosqlite
+presidio-analyzer
+presidio-anonymizer
+# lets /v1/logs accept protobuf OTLP (the default for OpenTelemetry SDKs and collectors)
+opentelemetry-proto
+
+# Tests
+pytest
+pytest-asyncio
+
+# tools/label_with_drain.py only
+drain3
+
+# tools/fake_service_otel.py only
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http
+
+# After installing, also run: python -m spacy download en_core_web_sm

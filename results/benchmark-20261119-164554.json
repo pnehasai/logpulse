@@ -1,0 +1,54 @@
+{
+  "kind": "benchmark",
+  "started_at": 1795086930.1232238,
+  "results": {
+    "async": {
+      "endpoint": "/v1/telemetry/ingest",
+      "requests": 300,
+      "concurrency": 5,
+      "succeeded": 300,
+      "status_counts": {
+        "202": 300
+      },
+      "wall_time_s": 18.27,
+      "throughput_rps": 16.4,
+      "latency_ms": {
+        "p50": 219.32,
+        "p95": 624.75,
+        "p99": 1030.09,
+        "max": 1206.59,
+        "mean": 283.4
+      }
+    }
+  },
+  "llm_usage_during_run": {
+    "pipeline": {
+      "calls": 0,
+      "failed_calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "avg_tokens_per_call": null,
+      "latency": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "max_ms": null
+      }
+    },
+    "sync_baseline": {
+      "calls": 0,
+      "failed_calls": 0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0,
+      "avg_tokens_per_call": null,
+      "latency": {
+        "count": 0,
+        "p50_ms": null,
+        "p95_ms": null,
+        "max_ms": null
+      }
+    }
+  }
+}

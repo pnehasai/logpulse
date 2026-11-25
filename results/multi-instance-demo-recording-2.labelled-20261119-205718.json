@@ -1,0 +1,360 @@
+{
+  "kind": "multi_instance",
+  "dataset": "demo-recording-2.labelled",
+  "lines": 5000,
+  "rate_per_s": 20.0,
+  "results": {
+    "on": {
+      "lines_sent": 5000,
+      "lines_failed": 0,
+      "started_at": 1795101445.780344,
+      "summary": {
+        "since": 1795101445.780344,
+        "logs": {
+          "total": 5000,
+          "handled": 5000,
+          "cache_hit": 4987,
+          "llm_compiled": 13,
+          "failed": 0,
+          "pending": 0,
+          "unresolved": 0,
+          "cache_hit_instant": 4865,
+          "cache_hit_after_wait": 122
+        },
+        "cache_hit_rate_pct": 99.7,
+        "rules_learned_total": 13,
+        "llm": {
+          "pipeline": {
+            "calls": 14,
+            "failed_calls": 0,
+            "prompt_tokens": 3464,
+            "completion_tokens": 5966,
+            "total_tokens": 9430,
+            "avg_tokens_per_call": 673.6,
+            "latency": {
+              "count": 14,
+              "p50_ms": 1290.798,
+              "p95_ms": 2649.698,
+              "max_ms": 2649.7
+            }
+          },
+          "sync_baseline": {
+            "calls": 0,
+            "failed_calls": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0,
+            "avg_tokens_per_call": null,
+            "latency": {
+              "count": 0,
+              "p50_ms": null,
+              "p95_ms": null,
+              "max_ms": null
+            }
+          }
+        },
+        "naive_comparison": {
+          "naive_llm_calls": 5000,
+          "actual_llm_calls": 14,
+          "tokens_per_naive_call_used": 673.6,
+          "naive_tokens_estimate": 3368000,
+          "actual_tokens": 9430,
+          "token_reduction_pct": 99.7,
+          "note": "naive = one LLM call per log, at the measured tokens per call"
+        },
+        "latency": {
+          "kafka_queue_lag": {
+            "count": 5000,
+            "p50_ms": 5.462,
+            "p95_ms": 109.851,
+            "max_ms": 2442.37
+          },
+          "ingest_to_fix_cache_hit": {
+            "count": 4865,
+            "p50_ms": 11.508,
+            "p95_ms": 84.244,
+            "max_ms": 1983.98
+          },
+          "ingest_to_fix_hit_after_wait": {
+            "count": 122,
+            "p50_ms": 10214.418,
+            "p95_ms": 13714.789,
+            "max_ms": 14476.1
+          },
+          "ingest_to_fix_llm": {
+            "count": 13,
+            "p50_ms": 9845.347,
+            "p95_ms": 14685.411,
+            "max_ms": 14685.41
+          },
+          "ingest_to_fix_by_route": {
+            "L1_LOCAL_CACHE": {
+              "count": 4861,
+              "p50_ms": 11.506,
+              "p95_ms": 84.076,
+              "max_ms": 1983.98
+            },
+            "L1_LOCAL_CACHE_AFTER_LOCK_WAIT": {
+              "count": 1,
+              "p50_ms": 10913.018,
+              "p95_ms": 10913.018,
+              "max_ms": 10913.02
+            },
+            "L1_LOCAL_CACHE_AFTER_QUEUE": {
+              "count": 114,
+              "p50_ms": 10214.418,
+              "p95_ms": 13772.561,
+              "max_ms": 14476.1
+            },
+            "L2_REDIS_FALLBACK": {
+              "count": 4,
+              "p50_ms": 18.213,
+              "p95_ms": 1807.646,
+              "max_ms": 1807.65
+            },
+            "L2_REDIS_FALLBACK_AFTER_LOCK_WAIT": {
+              "count": 4,
+              "p50_ms": 8760.206,
+              "p95_ms": 13447.195,
+              "max_ms": 13447.2
+            },
+            "L2_REDIS_FALLBACK_AFTER_QUEUE": {
+              "count": 3,
+              "p50_ms": 6845.483,
+              "p95_ms": 12684.517,
+              "max_ms": 12684.52
+            },
+            "LLM_COMPILED": {
+              "count": 13,
+              "p50_ms": 9845.347,
+              "p95_ms": 14685.411,
+              "max_ms": 14685.41
+            }
+          },
+          "cache_lookup_by_result": {
+            "L1_LOCAL_CACHE": {
+              "count": 4861,
+              "p50_ms": 0.041,
+              "p95_ms": 0.119,
+              "max_ms": 1.0
+            },
+            "L2_REDIS_FALLBACK": {
+              "count": 4,
+              "p50_ms": 3.184,
+              "p95_ms": 5.783,
+              "max_ms": 5.78
+            },
+            "MISS": {
+              "count": 135,
+              "p50_ms": 2.329,
+              "p95_ms": 14.27,
+              "max_ms": 27.36
+            }
+          }
+        },
+        "instances": {
+          "app-2": {
+            "logs": 1664,
+            "l1_hits": 1654,
+            "l2_hits": 4,
+            "llm_compiled": 6,
+            "llm_calls": 7,
+            "llm_tokens": 5621
+          },
+          "app-1": {
+            "logs": 1680,
+            "l1_hits": 1673,
+            "l2_hits": 4,
+            "llm_compiled": 3,
+            "llm_calls": 3,
+            "llm_tokens": 1688
+          },
+          "app-3": {
+            "logs": 1656,
+            "l1_hits": 1649,
+            "l2_hits": 3,
+            "llm_compiled": 4,
+            "llm_calls": 4,
+            "llm_tokens": 2121
+          }
+        },
+        "duplicate_compiles": {
+          "templates_compiled": 13,
+          "llm_compiled_logs": 13,
+          "extra_compiles_beyond_one_per_template": 0
+        },
+        "dataset_eval": {
+          "labelled_logs": 5000,
+          "distinct_templates": 13,
+          "cache_hits_checked": 4987,
+          "cache_hits_same_template": 4987,
+          "rule_precision_pct": 100.0
+        }
+      },
+      "run_id": "multi-on-20261119-204633",
+      "redis_sharing": true,
+      "instances": 3
+    },
+    "off": {
+      "lines_sent": 5000,
+      "lines_failed": 0,
+      "started_at": 1795101754.81834,
+      "summary": {
+        "since": 1795101754.81834,
+        "logs": {
+          "total": 5000,
+          "handled": 5000,
+          "cache_hit": 4970,
+          "llm_compiled": 28,
+          "failed": 2,
+          "pending": 0,
+          "unresolved": 0,
+          "cache_hit_instant": 4699,
+          "cache_hit_after_wait": 271
+        },
+        "cache_hit_rate_pct": 99.4,
+        "rules_learned_total": 28,
+        "llm": {
+          "pipeline": {
+            "calls": 32,
+            "failed_calls": 0,
+            "prompt_tokens": 7689,
+            "completion_tokens": 13313,
+            "total_tokens": 21002,
+            "avg_tokens_per_call": 656.3,
+            "latency": {
+              "count": 32,
+              "p50_ms": 1155.825,
+              "p95_ms": 3115.066,
+              "max_ms": 3195.71
+            }
+          },
+          "sync_baseline": {
+            "calls": 0,
+            "failed_calls": 0,
+            "prompt_tokens": 0,
+            "completion_tokens": 0,
+            "total_tokens": 0,
+            "avg_tokens_per_call": null,
+            "latency": {
+              "count": 0,
+              "p50_ms": null,
+              "p95_ms": null,
+              "max_ms": null
+            }
+          }
+        },
+        "naive_comparison": {
+          "naive_llm_calls": 5000,
+          "actual_llm_calls": 32,
+          "tokens_per_naive_call_used": 656.3,
+          "naive_tokens_estimate": 3281500,
+          "actual_tokens": 21002,
+          "token_reduction_pct": 99.4,
+          "note": "naive = one LLM call per log, at the measured tokens per call"
+        },
+        "latency": {
+          "kafka_queue_lag": {
+            "count": 5000,
+            "p50_ms": 5.428,
+            "p95_ms": 857.856,
+            "max_ms": 5687.26
+          },
+          "ingest_to_fix_cache_hit": {
+            "count": 4699,
+            "p50_ms": 10.988,
+            "p95_ms": 349.475,
+            "max_ms": 5691.45
+          },
+          "ingest_to_fix_hit_after_wait": {
+            "count": 271,
+            "p50_ms": 27181.906,
+            "p95_ms": 54156.467,
+            "max_ms": 54584.0
+          },
+          "ingest_to_fix_llm": {
+            "count": 28,
+            "p50_ms": 17081.761,
+            "p95_ms": 54567.463,
+            "max_ms": 54656.24
+          },
+          "ingest_to_fix_by_route": {
+            "L1_LOCAL_CACHE": {
+              "count": 4699,
+              "p50_ms": 10.988,
+              "p95_ms": 349.475,
+              "max_ms": 5691.45
+            },
+            "L1_LOCAL_CACHE_AFTER_QUEUE": {
+              "count": 271,
+              "p50_ms": 27181.906,
+              "p95_ms": 54156.467,
+              "max_ms": 54584.0
+            },
+            "LLM_COMPILED": {
+              "count": 28,
+              "p50_ms": 17081.761,
+              "p95_ms": 54567.463,
+              "max_ms": 54656.24
+            }
+          },
+          "cache_lookup_by_result": {
+            "L1_LOCAL_CACHE": {
+              "count": 4699,
+              "p50_ms": 0.034,
+              "p95_ms": 0.071,
+              "max_ms": 1.92
+            },
+            "MISS": {
+              "count": 301,
+              "p50_ms": 0.022,
+              "p95_ms": 0.062,
+              "max_ms": 0.26
+            }
+          }
+        },
+        "instances": {
+          "app-2": {
+            "logs": 1645,
+            "l1_hits": 1636,
+            "l2_hits": 0,
+            "llm_compiled": 9,
+            "llm_calls": 9,
+            "llm_tokens": 4797
+          },
+          "app-1": {
+            "logs": 1694,
+            "l1_hits": 1683,
+            "l2_hits": 0,
+            "llm_compiled": 11,
+            "llm_calls": 11,
+            "llm_tokens": 6568
+          },
+          "app-3": {
+            "logs": 1661,
+            "l1_hits": 1651,
+            "l2_hits": 0,
+            "llm_compiled": 8,
+            "llm_calls": 12,
+            "llm_tokens": 9637
+          }
+        },
+        "duplicate_compiles": {
+          "templates_compiled": 12,
+          "llm_compiled_logs": 28,
+          "extra_compiles_beyond_one_per_template": 16
+        },
+        "dataset_eval": {
+          "labelled_logs": 5000,
+          "distinct_templates": 13,
+          "cache_hits_checked": 4970,
+          "cache_hits_same_template": 4970,
+          "rule_precision_pct": 100.0
+        }
+      },
+      "run_id": "multi-off-20261119-205156",
+      "redis_sharing": false,
+      "instances": 3
+    }
+  }
+}

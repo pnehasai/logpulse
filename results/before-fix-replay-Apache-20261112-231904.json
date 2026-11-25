@@ -1,0 +1,88 @@
+{
+  "kind": "dataset_replay",
+  "dataset": "Apache",
+  "lines_sent": 2000,
+  "lines_failed": 0,
+  "distinct_templates_sent": 6,
+  "rate_per_s": 20.0,
+  "started_at": 1794505627.523255,
+  "summary": {
+    "since": 1794505627.523255,
+    "logs": {
+      "total": 2000,
+      "handled": 2000,
+      "cache_hit": 1994,
+      "llm_compiled": 6,
+      "failed": 0,
+      "pending": 0
+    },
+    "cache_hit_rate_pct": 99.7,
+    "rules_learned_total": 10,
+    "llm": {
+      "pipeline": {
+        "calls": 6,
+        "failed_calls": 0,
+        "prompt_tokens": 1085,
+        "completion_tokens": 1503,
+        "total_tokens": 2588,
+        "avg_tokens_per_call": 431.3,
+        "latency": {
+          "count": 6,
+          "p50_ms": 960.78,
+          "p95_ms": 1291.11,
+          "max_ms": 1291.11
+        }
+      },
+      "sync_baseline": {
+        "calls": 0,
+        "failed_calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "avg_tokens_per_call": null,
+        "latency": {
+          "count": 0,
+          "p50_ms": null,
+          "p95_ms": null,
+          "max_ms": null
+        }
+      }
+    },
+    "naive_comparison": {
+      "naive_llm_calls": 2000,
+      "actual_llm_calls": 6,
+      "tokens_per_naive_call_used": 431.3,
+      "naive_tokens_estimate": 862600,
+      "actual_tokens": 2588,
+      "token_reduction_pct": 99.7,
+      "note": "naive = one LLM call per log, at the measured tokens per call"
+    },
+    "latency": {
+      "kafka_queue_lag": {
+        "count": 2000,
+        "p50_ms": 10.87,
+        "p95_ms": 438.56,
+        "max_ms": 1723.62
+      },
+      "ingest_to_fix_cache_hit": {
+        "count": 1994,
+        "p50_ms": 20.97,
+        "p95_ms": 631.17,
+        "max_ms": 9060.18
+      },
+      "ingest_to_fix_llm": {
+        "count": 6,
+        "p50_ms": 4528.42,
+        "p95_ms": 9809.82,
+        "max_ms": 9809.82
+      }
+    },
+    "dataset_eval": {
+      "labelled_logs": 2000,
+      "distinct_templates": 6,
+      "cache_hits_checked": 1994,
+      "cache_hits_same_template": 1994,
+      "rule_precision_pct": 100.0
+    }
+  }
+}

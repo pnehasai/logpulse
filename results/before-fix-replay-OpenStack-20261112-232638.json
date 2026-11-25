@@ -1,0 +1,88 @@
+{
+  "kind": "dataset_replay",
+  "dataset": "OpenStack",
+  "lines_sent": 1999,
+  "lines_failed": 1,
+  "distinct_templates_sent": 43,
+  "rate_per_s": 10.0,
+  "started_at": 1794505751.1691582,
+  "summary": {
+    "since": 1794505751.1691582,
+    "logs": {
+      "total": 2000,
+      "handled": 2000,
+      "cache_hit": 1925,
+      "llm_compiled": 60,
+      "failed": 15,
+      "pending": 0
+    },
+    "cache_hit_rate_pct": 96.2,
+    "rules_learned_total": 70,
+    "llm": {
+      "pipeline": {
+        "calls": 91,
+        "failed_calls": 0,
+        "prompt_tokens": 19992,
+        "completion_tokens": 43685,
+        "total_tokens": 63677,
+        "avg_tokens_per_call": 699.7,
+        "latency": {
+          "count": 91,
+          "p50_ms": 1428.16,
+          "p95_ms": 2504.95,
+          "max_ms": 2982.23
+        }
+      },
+      "sync_baseline": {
+        "calls": 0,
+        "failed_calls": 0,
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0,
+        "avg_tokens_per_call": null,
+        "latency": {
+          "count": 0,
+          "p50_ms": null,
+          "p95_ms": null,
+          "max_ms": null
+        }
+      }
+    },
+    "naive_comparison": {
+      "naive_llm_calls": 2000,
+      "actual_llm_calls": 91,
+      "tokens_per_naive_call_used": 699.7,
+      "naive_tokens_estimate": 1399400,
+      "actual_tokens": 63677,
+      "token_reduction_pct": 95.4,
+      "note": "naive = one LLM call per log, at the measured tokens per call"
+    },
+    "latency": {
+      "kafka_queue_lag": {
+        "count": 2000,
+        "p50_ms": 8.77,
+        "p95_ms": 64.1,
+        "max_ms": 26460.07
+      },
+      "ingest_to_fix_cache_hit": {
+        "count": 1925,
+        "p50_ms": 23.39,
+        "p95_ms": 256769.23,
+        "max_ms": 292410.14
+      },
+      "ingest_to_fix_llm": {
+        "count": 60,
+        "p50_ms": 187473.01,
+        "p95_ms": 277096.42,
+        "max_ms": 292469.96
+      }
+    },
+    "dataset_eval": {
+      "labelled_logs": 2000,
+      "distinct_templates": 43,
+      "cache_hits_checked": 1925,
+      "cache_hits_same_template": 1925,
+      "rule_precision_pct": 100.0
+    }
+  }
+}
